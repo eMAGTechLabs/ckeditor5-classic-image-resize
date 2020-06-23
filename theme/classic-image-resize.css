@@ -1,0 +1,13 @@
+.ck.ck-input-text.resize {
+    min-width: 100px;
+    width: 100px;
+}
+
+.ck-content .image {
+    transition: width 0.5s, height 0.5s;
+}
+
+.ck-content .image img {
+    transition: width 0.5s, height 0.5s;
+}
+

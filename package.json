@@ -1,0 +1,40 @@
+{
+  "name": "ckeditor5-classic-image-resize",
+  "version": "1.0.0",
+  "description": "Classic Image Resize Tool for CKEditor5",
+  "main": "src/classicimageresize.js",
+  "keywords": [
+    "ckeditor5",
+    "image",
+    "classic",
+    "resize",
+    "width",
+    "height",
+    "plugin"
+  ],
+  "dependencies": {
+    "@ckeditor/ckeditor5-core": "^19.0.0",
+    "@ckeditor/ckeditor5-image": "^19.0.0",
+    "@ckeditor/ckeditor5-ui": "^19.0.0",
+    "@ckeditor/ckeditor5-utils": "^19.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eMAGTechLabs/ckeditor5-classic-image-resize"
+  },
+  "bugs": {
+    "url": "https://github.com/eMAGTechLabs/ckeditor5-classic-image-resize/issues"
+  },
+  "author": "th3mast3rofshadows",
+  "license": "GPL",
+  "devDependencies": {
+    "@babel/cli": "^7.10.*",
+    "@babel/core": "^7.10.*",
+    "@babel/plugin-transform-runtime": "^7.10.3",
+    "@babel/polyfill": "^7.10.1",
+    "@babel/preset-env": "^7.10.*",
+    "@babel/register": "^7.10.*",
+    "@babel/runtime": "^7.10.3",
+    "mocha": "^8.0.1"
+  }
+}
