@@ -3,8 +3,6 @@ CKEditor5 Classic Image Resize Plugin
 
 This plugin allows you to edit the size of an image using width and height input, as well as providing an aspect ratio lock tool that makes it easy to scale without distorting the image.
 
-# Issues
-Feel free to submit issues and enhancement requests.
 
 # Installation
 
@@ -65,6 +63,10 @@ While editing, the *aspect ratio lock* can be used for scaling the image using i
 
 ### Downcasting
 The plugin "downcasts" (writes to the DOM) the *style* attribute for both the `<img>` tag and the `<figure>` tag. This happens because images in ckeditor5 are wrapped in `<figure>` tags.
+
+
+# Issues
+Feel free to submit issues and enhancement requests.
 
 
 
