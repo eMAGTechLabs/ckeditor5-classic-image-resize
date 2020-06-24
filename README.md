@@ -51,3 +51,19 @@ or
 yarn build
 ```
 
+# How it works
+
+### Upcasting
+![Toolbar Inputs](https://bucket-doc-s1.s3.eu-central-1.amazonaws.com/images/Screenshot+from+2020-06-24+14-28-27.png)
+<p>The plugin "upcasts" (reads from the DOM) the image `<img>` *style* attribute, checks for `width:` and `height:` and adds the values to the toolbar inputs.</p>
+
+### Editing
+![Aspect Ratio Lock](https://bucket-doc-s1.s3.eu-central-1.amazonaws.com/images/Screenshot+from+2020-06-24+15-53-01.png)
+<p>While editing, the *aspect ratio lock* can be used for scaling the image using its native aspect ratio. (note: it will only scale on the width axis)</p>
+
+### Downcasting
+<p>The plugin "downcasts" (writes to the DOM) the *style* attribute for both the `<img>` tag and the `<figure>` tag. This happens because images in ckeditor5 are wrapped in `<figure>` tags.</p>
+
+
+
+
