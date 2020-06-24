@@ -9,15 +9,18 @@ Feel free to submit issues and enhancement requests.
 # Installation
 
 ```
-Coming soon...
+npm i @emagtechlabs/ckeditor5-classic-image-resize
 ```
-
+or
+```
+yarn add @emagtechlabs/ckeditor5-classic-image-resize
+```
 
 # Usage
 
 Update src/ckeditor.js with:
 ```javascript
-import ClassicImageResize from 'ckeditor5-classic-image-resize';
+import ClassicImageResize from '@emagtechlabs/ckeditor5-classic-image-resize';
 
 Editor.builtinPlugins = [
   // ...
