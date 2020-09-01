@@ -1,6 +1,6 @@
 {
   "name": "@emagtechlabs/ckeditor5-classic-image-resize",
-  "version": "1.0.3",
+  "version": "1.0.6",
   "description": "Classic Image Resize Tool for CKEditor5",
   "main": "src/classicimageresize.js",
   "keywords": [
@@ -26,8 +26,5 @@
     "url": "https://github.com/eMAGTechLabs/ckeditor5-classic-image-resize/issues"
   },
   "author": "th3mast3rofshadows",
-  "license": "GPL",
-  "devDependencies": {
-    "mocha": "^8.0.1"
-  }
+  "license": "GPL"
 }
