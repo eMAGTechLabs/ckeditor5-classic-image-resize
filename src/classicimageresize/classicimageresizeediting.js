@@ -22,12 +22,10 @@ export default class ClassicImageResizeEditing extends Plugin {
     init() {
         const editor = this.editor;
         const schema = editor.model.schema;
-        const dimensions = ['width'];
-
 
         // Register imageSize command.
-        editor.commands.add( 'imageSize', new ClassicImageResizeCommand( editor ) );
-        schema.register( 'imageSize', {
+        editor.commands.add( 'imageMaxWidth', new ClassicImageResizeCommand( editor ) );
+        /*schema.register( 'imageInline', {
           allowWhere: '$text',
           isInline: true,
           isObject: true,
@@ -35,6 +33,14 @@ export default class ClassicImageResizeEditing extends Plugin {
             'equation', 'type', 'display', 'fontBackgroundColor', 'fontColor' //allow fontBackgroundColor and fontcolor
           ]
         } );
+        schema.register( 'imageBlock', {
+            allowWhere: '$text',
+            isInline: true,
+            isObject: true,
+            allowAttributes: [
+                'equation', 'type', 'display', 'fontBackgroundColor', 'fontColor' //allow fontBackgroundColor and fontcolor
+            ]
+        } );*/
 
         schema.extend( 'imageInline', {
             allowAttributes: [
@@ -46,53 +52,51 @@ export default class ClassicImageResizeEditing extends Plugin {
             'max-width'
           ]
         } );
-
-
-        for ( let key in dimensions ) {
-            let downcastConverter = this._modelToViewConverter(dimensions[key]);
-
-            editor.editing.downcastDispatcher.on( `attribute:${dimensions[key]}:image`, downcastConverter);
-            editor.data.downcastDispatcher.on( `attribute:${dimensions[key]}:image`, downcastConverter);
-
-            this._viewToModelConverter(editor, dimensions[key]);
-        }
+        this._registerConverters( editor, 'imageBlock' );
+        this._registerConverters( editor, 'imageInline' );
     }
 
-    _modelToViewConverter(dimension) {
-       return ( evt, data, conversionApi ) => {
-            if ( !conversionApi.consumable.consume( data.item, evt.name ) ) {
-                return;
-            }
+    _registerConverters( editor , imageType ) {
+        editor.conversion.for( 'downcast' ).add( dispatcher =>
+            dispatcher.on( `attribute:max-width:${ imageType }`, ( evt, data, conversionApi ) => {
+                console.log('downcast');
+                console.log(evt.name);
+                console.log(data);
 
-           const viewWriter = conversionApi.writer;
-           const figure = conversionApi.mapper.toViewElement( data.item );
+                if ( !conversionApi.consumable.consume( data.item, evt.name ) ) {
+                    return;
+                }
 
-           const viewImage = [ ...figure.getChildren() ]
-               .find( element => element.name === 'img' );
+                const viewWriter = conversionApi.writer;
+                const figure = conversionApi.mapper.toViewElement( data.item );
 
-           const resizeUnit = this.editor.config.get( 'image.resizeUnit' ) || '%';
-           if ( data.attributeNewValue !== null ) {
-               viewWriter.setStyle( dimension, data.attributeNewValue + resizeUnit, figure );
-               viewWriter.setStyle( dimension, data.attributeNewValue + resizeUnit, viewImage);
-           } else {
-               viewWriter.removeStyle( dimension, figure );
-               viewWriter.removeStyle( dimension, viewImage);
-           }
-           viewWriter.removeClass( 'image_resized', figure );
-        }
-    }
+                if ( data.attributeNewValue !== null ) {
+                    viewWriter.setStyle( 'max-width', data.attributeNewValue + 'px', figure );
+                    viewWriter.addClass( 'image_resized', figure );
+                } else {
+                    viewWriter.removeStyle( 'max-width', figure );
+                    viewWriter.removeClass( 'image_resized', figure );
+                }
+            } ));
 
-    _viewToModelConverter(editor, dimension) {
+        // upcast
+        // View -> Model
+        // _viewToModelConverter
         editor.conversion.for( 'upcast' ).attributeToAttribute( {
             view: {
-                name: 'img',
+                name: imageType === 'imageBlock' ? 'figure' : 'img',
                 styles: {
-                    [dimension]: /.+/
+                    'max-width': /.+/
                 }
             },
             model: {
-                key: dimension,
-                value: viewElement => viewElement.getStyle(dimension).match(/\d+/g)
+                key: 'max-width',
+                value: viewElement => {
+                    console.log('viewElement attributeToAttribute');
+                    console.log(viewElement);
+                    console.log(viewElement.getStyle('max-width').match(/\d+/g));
+                    return viewElement.getStyle('max-width').match(/\d+/g);
+                }
             },
             converterPriority: 'low'
         } );

@@ -29,11 +29,13 @@ export default class ClassicImageResizeUi extends Plugin {
         };
         this._createInput( widthDimension );
 
+/*
         const heightDimension = {
             name: 'height',
             label: 'Height'
         }
         this._createInput( heightDimension );
+*/
 
         const aspectRatio = {
             name: 'lockAspectRatio',
@@ -52,40 +54,42 @@ export default class ClassicImageResizeUi extends Plugin {
      */
     _createInput( dimension ) {
         const editor = this.editor;
-        const componentName = `imageSize:${ dimension.name }`;
+        const componentName = `imageMaxWidth`;
 
         editor.ui.componentFactory.add( componentName, locale => {
-            const command = editor.commands.get( 'imageSize' );
+            const command = editor.commands.get( 'imageMaxWidth' );
             const input = new InputTextView( locale );
 
             input.set( {
-                placeholder: dimension.name,
+                placeholder: 'max-width',
             } );
 
             input.extendTemplate({
                 attributes: {
                     class: [
-                        'resize'
+                        'max-width'
                     ]
                 }
             })
 
             input.bind( 'value' ).to( command, (value) => {
-                return value ? value[dimension.name] : null;
+                console.log(value);
+                return value ? value['max-width'] : null;
             } );
 
-            if (dimension.name === 'height') {
+/*            if (dimension.name === 'height') {
                 input.bind( 'isReadOnly' ).to( command , 'isLockedAspectRatio');
-            }
+            }*/
 
             input.on('input', () => {
+                console.log(input);
                 this._validateInput(input, dimension.name);
                 if (input.hasError) {
                     return input;
                 }
 
-                editor.execute( 'imageSize', {
-                    [dimension.name]: input.element.value
+                editor.execute( 'imageMaxWidth', {
+                    'max-width': input.element.value
                 })
             } );
 
@@ -96,10 +100,10 @@ export default class ClassicImageResizeUi extends Plugin {
     _createButton( aspectRatio ) {
         const editor = this.editor;
 
-        const componentName = `imageSize:${ aspectRatio.name }`;
+        const componentName = `imageMaxWidth:${ aspectRatio.name }`;
 
         editor.ui.componentFactory.add( componentName, locale => {
-            const command = editor.commands.get( 'imageSize' );
+            const command = editor.commands.get( 'imageMaxWidth' );
             const view = new ButtonView( locale );
 
             view.set( {
@@ -113,7 +117,7 @@ export default class ClassicImageResizeUi extends Plugin {
             view.bind( 'isOn' ).to( command, 'isLockedAspectRatio');
 
             this.listenTo( view, 'execute', () => {
-                editor.execute( 'imageSize', {
+                editor.execute( 'imageMaxWidth', {
                     lockAspectRatio: !view.isOn
                 } );
                 editor.editing.view.focus();

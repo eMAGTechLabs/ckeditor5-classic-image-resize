@@ -1,6 +1,4 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
-//import { isImage } from '@ckeditor/ckeditor5-image/src/image/utils';
-
 /**
  * The image resize command. Currently, it supports both the width and the height attributes.
  *
@@ -25,16 +23,15 @@ export default class ClassicImageResizeCommand extends Command {
      * @inheritDoc
      */
     refresh() {
+        const imageUtils = this.editor.plugins.get( 'ImageUtils' );
         const element = this.editor.model.document.selection.getSelectedElement();
-        this.isEnabled = !!element && element.is( 'image' );
+        this.isEnabled = imageUtils.isImage( element );
 
-        let height = this.getHeight( element );
-        let width = this.getWidth( element );
+        let width = this.getMaxWidth( element );
 
-        if (width || height) {
+        if (width) {
             this.value = {
-                'width': width,
-                'height': height
+                'max-width': width
             };
         } else {
             this.value = null;
@@ -43,22 +40,12 @@ export default class ClassicImageResizeCommand extends Command {
         this.isLockedAspectRatio = this.getIsLockedAspectRatio(element);
     }
 
-    getHeight(element) {
-        let height = null;
-        if ( element && element.hasAttribute( 'height' ) ) {
-            height = element.getAttribute( 'height' );
-        }
-
-        return height;
-    }
-
-    getWidth(element) {
+    getMaxWidth(element) {
         let width = null;
-        if ( element && element.hasAttribute( 'width' ) ) {
-            width = element.getAttribute( 'width' );
+        if ( element && element.hasAttribute( 'max-width' ) ) {
+            width = element.getAttribute( 'max-width' );
         }
-
-        return width;
+        return Number(width);
     }
 
     getIsLockedAspectRatio(element) {
@@ -83,19 +70,22 @@ export default class ClassicImageResizeCommand extends Command {
         if (options.lockAspectRatio !== undefined) {
             this.isLockedAspectRatio = options.lockAspectRatio;
         }
+        console.log('exeCute');
+        console.log(options);
+
 
         model.change( writer => {
-            if (options.width) {
+            if (options['max-width']) {
                 writer.setAttribute(
-                    'width',
-                    options.width,
+                    'max-width',
+                    options['max-width'],
                     imageElement
                 )
             }
 
             writer.setAttribute('isLockedAspectRatio', this.isLockedAspectRatio, imageElement);
 
-            if (this.isLockedAspectRatio) {
+/*            if (this.isLockedAspectRatio) {
                 writer.setAttribute('height', null, imageElement);
             }
 
@@ -105,7 +95,7 @@ export default class ClassicImageResizeCommand extends Command {
                     options.height,
                     imageElement
                 )
-            }
+            }*/
 
         });
 
