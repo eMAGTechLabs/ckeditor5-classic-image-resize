@@ -1,7 +1,14 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import ClassicImageResizeCommand from "./classicimageresizecommand";
+import ImageUtils from "@ckeditor/ckeditor5-image/src/imageutils";
 
 export default class ClassicImageResizeEditing extends Plugin {
+    /**
+     * @inheritDoc
+     */
+    static get requires() {
+        return [ ImageUtils ];
+    }
     /**
      * @inheritDoc
      */
@@ -15,14 +22,29 @@ export default class ClassicImageResizeEditing extends Plugin {
     init() {
         const editor = this.editor;
         const schema = editor.model.schema;
-        const dimensions = ['width', 'height'];
+        const dimensions = ['width'];
 
-        schema.extend( 'image', {
+
+        // Register imageSize command.
+        editor.commands.add( 'imageSize', new ClassicImageResizeCommand( editor ) );
+        schema.register( 'imageSize', {
+          allowWhere: '$text',
+          isInline: true,
+          isObject: true,
+          allowAttributes: [
+            'equation', 'type', 'display', 'fontBackgroundColor', 'fontColor' //allow fontBackgroundColor and fontcolor
+          ]
+        } );
+
+        schema.extend( 'imageInline', {
             allowAttributes: [
-                'width',
-                'height',
-                'isLockedAspectRatio'
+                'max-width'
             ]
+        } );
+        schema.extend( 'imageBlock', {
+          allowAttributes: [
+            'max-width'
+          ]
         } );
 
 
@@ -34,10 +56,6 @@ export default class ClassicImageResizeEditing extends Plugin {
 
             this._viewToModelConverter(editor, dimensions[key]);
         }
-
-
-        // Register imageSize command.
-        editor.commands.add( 'imageSize', new ClassicImageResizeCommand( editor ) );
     }
 
     _modelToViewConverter(dimension) {

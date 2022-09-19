@@ -1,5 +1,5 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
-import { isImage } from '@ckeditor/ckeditor5-image/src/image/utils';
+//import { isImage } from '@ckeditor/ckeditor5-image/src/image/utils';
 
 /**
  * The image resize command. Currently, it supports both the width and the height attributes.
@@ -26,7 +26,7 @@ export default class ClassicImageResizeCommand extends Command {
      */
     refresh() {
         const element = this.editor.model.document.selection.getSelectedElement();
-        this.isEnabled = isImage( element );
+        this.isEnabled = !!element && element.is( 'image' );
 
         let height = this.getHeight( element );
         let width = this.getWidth( element );
