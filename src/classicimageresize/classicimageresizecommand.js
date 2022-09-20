@@ -1,18 +1,12 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
 /**
  * The image resize command. Currently, it supports both the width and the height attributes.
- *
- * @extends module:core/command~Command
  */
 export default class ClassicImageResizeCommand extends Command {
 
     constructor( editor ) {
         super( editor );
-
-        this.set('isLockedAspectRatio', undefined);
-
         this.value = null;
-        this.isLockedAspectRatio = false;
     }
 
     init() {
@@ -36,8 +30,6 @@ export default class ClassicImageResizeCommand extends Command {
         } else {
             this.value = null;
         }
-
-        this.isLockedAspectRatio = this.getIsLockedAspectRatio(element);
     }
 
     getMaxWidth(element) {
@@ -48,31 +40,14 @@ export default class ClassicImageResizeCommand extends Command {
         return Number(width);
     }
 
-    getIsLockedAspectRatio(element) {
-        let isLockedAspectRatio = null;
-        if ( element && element.hasAttribute( 'isLockedAspectRatio' ) ) {
-            isLockedAspectRatio = element.getAttribute( 'isLockedAspectRatio' );
-        }
-
-        return isLockedAspectRatio;
-    }
-
     /**
      * Executes the command.
      * @param {Object} options
-     * @param {String|null} options.width The new width of the image.
-     * @param {String|null} options.height The new height of the image.
-     * @fires execute
+     * @param {String|null} options['max-width'] The max-width of the image.
      */
     execute( options ) {
         const model = this.editor.model;
         const imageElement = model.document.selection.getSelectedElement();
-        if (options.lockAspectRatio !== undefined) {
-            this.isLockedAspectRatio = options.lockAspectRatio;
-        }
-        console.log('exeCute');
-        console.log(options);
-
 
         model.change( writer => {
             if (options['max-width']) {
@@ -82,21 +57,6 @@ export default class ClassicImageResizeCommand extends Command {
                     imageElement
                 )
             }
-
-            writer.setAttribute('isLockedAspectRatio', this.isLockedAspectRatio, imageElement);
-
-/*            if (this.isLockedAspectRatio) {
-                writer.setAttribute('height', null, imageElement);
-            }
-
-            if (!this.isLockedAspectRatio && options.height) {
-                writer.setAttribute(
-                    'height',
-                    options.height,
-                    imageElement
-                )
-            }*/
-
         });
 
         this.refresh();

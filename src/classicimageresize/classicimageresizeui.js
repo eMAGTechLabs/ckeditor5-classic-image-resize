@@ -1,14 +1,10 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import InputTextView from "@ckeditor/ckeditor5-ui/src/inputtext/inputtextview";
-import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
-import aspectRatioLockIcon from "../../theme/icons/aspect-ratio-lock.svg";
 
 import '../../theme/classic-image-resize.css';
 
 /**
  * The image style UI plugin.
- *
- * @extends module:core/plugin~Plugin
  */
 export default class ClassicImageResizeUi extends Plugin {
     /**
@@ -23,36 +19,15 @@ export default class ClassicImageResizeUi extends Plugin {
      * @inheritDoc
      */
     init() {
-        const widthDimension = {
-            name: 'width',
-            label: 'Width'
-        };
-        this._createInput( widthDimension );
-
-/*
-        const heightDimension = {
-            name: 'height',
-            label: 'Height'
-        }
-        this._createInput( heightDimension );
-*/
-
-        const aspectRatio = {
-            name: 'lockAspectRatio',
-            title: 'Lock Aspect Ratio',
-            icon: aspectRatioLockIcon
-        }
-        this._createButton( aspectRatio );
+        this._createInput();
     }
 
 
     /**
-     * Creates an input for each dimension and stores it in the editor {@link module:ui/componentfactory~ComponentFactory ComponentFactory}.
-     *
+     * Creates an input for max-width and stores it in the editor
      * @private
-     * @param {module:image/imagesize/imagesizeediting} dimension
      */
-    _createInput( dimension ) {
+    _createInput() {
         const editor = this.editor;
         const componentName = `imageMaxWidth`;
 
@@ -67,23 +42,18 @@ export default class ClassicImageResizeUi extends Plugin {
             input.extendTemplate({
                 attributes: {
                     class: [
-                        'max-width'
+                        'image-max-width-input'
                     ]
                 }
             })
 
             input.bind( 'value' ).to( command, (value) => {
-                console.log(value);
                 return value ? value['max-width'] : null;
             } );
 
-/*            if (dimension.name === 'height') {
-                input.bind( 'isReadOnly' ).to( command , 'isLockedAspectRatio');
-            }*/
-
             input.on('input', () => {
                 console.log(input);
-                this._validateInput(input, dimension.name);
+                this._validateInput(input);
                 if (input.hasError) {
                     return input;
                 }
@@ -97,37 +67,7 @@ export default class ClassicImageResizeUi extends Plugin {
         } );
     }
 
-    _createButton( aspectRatio ) {
-        const editor = this.editor;
-
-        const componentName = `imageMaxWidth:${ aspectRatio.name }`;
-
-        editor.ui.componentFactory.add( componentName, locale => {
-            const command = editor.commands.get( 'imageMaxWidth' );
-            const view = new ButtonView( locale );
-
-            view.set( {
-                label: aspectRatio.title,
-                icon: aspectRatio.icon,
-                tooltip: true,
-                isToggleable: true
-            } );
-
-            view.bind( 'isEnabled' ).to( command, 'isEnabled' )
-            view.bind( 'isOn' ).to( command, 'isLockedAspectRatio');
-
-            this.listenTo( view, 'execute', () => {
-                editor.execute( 'imageMaxWidth', {
-                    lockAspectRatio: !view.isOn
-                } );
-                editor.editing.view.focus();
-            } );
-
-            return view;
-        } );
-    }
-
-    _validateInput(view, dimension) {
+    _validateInput(view) {
         view.set('errorText', null);
         view.set('hasError', false);
 
@@ -137,7 +77,7 @@ export default class ClassicImageResizeUi extends Plugin {
         }
 
         if (view.element.value < 10) {
-            view.set('errorText', `Minimum ${dimension.name} size must be more than 10px`);
+            view.set('errorText', `Minimum size must be more than 10px`);
             view.set('hasError', true);
         }
         return view;

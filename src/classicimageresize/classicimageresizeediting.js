@@ -25,22 +25,6 @@ export default class ClassicImageResizeEditing extends Plugin {
 
         // Register imageSize command.
         editor.commands.add( 'imageMaxWidth', new ClassicImageResizeCommand( editor ) );
-        /*schema.register( 'imageInline', {
-          allowWhere: '$text',
-          isInline: true,
-          isObject: true,
-          allowAttributes: [
-            'equation', 'type', 'display', 'fontBackgroundColor', 'fontColor' //allow fontBackgroundColor and fontcolor
-          ]
-        } );
-        schema.register( 'imageBlock', {
-            allowWhere: '$text',
-            isInline: true,
-            isObject: true,
-            allowAttributes: [
-                'equation', 'type', 'display', 'fontBackgroundColor', 'fontColor' //allow fontBackgroundColor and fontcolor
-            ]
-        } );*/
 
         schema.extend( 'imageInline', {
             allowAttributes: [
