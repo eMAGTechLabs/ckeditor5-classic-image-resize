@@ -43,9 +43,6 @@ export default class ClassicImageResizeEditing extends Plugin {
     _registerConverters( editor , imageType ) {
         editor.conversion.for( 'downcast' ).add( dispatcher =>
             dispatcher.on( `attribute:max-width:${ imageType }`, ( evt, data, conversionApi ) => {
-                console.log('downcast');
-                console.log(evt.name);
-                console.log(data);
 
                 if ( !conversionApi.consumable.consume( data.item, evt.name ) ) {
                     return;
@@ -76,9 +73,6 @@ export default class ClassicImageResizeEditing extends Plugin {
             model: {
                 key: 'max-width',
                 value: viewElement => {
-                    console.log('viewElement attributeToAttribute');
-                    console.log(viewElement);
-                    console.log(viewElement.getStyle('max-width').match(/\d+/g));
                     return viewElement.getStyle('max-width').match(/\d+/g);
                 }
             },

@@ -52,7 +52,6 @@ export default class ClassicImageResizeUi extends Plugin {
             } );
 
             input.on('input', () => {
-                console.log(input);
                 this._validateInput(input);
                 if (input.hasError) {
                     return input;
