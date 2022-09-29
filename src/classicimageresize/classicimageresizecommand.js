@@ -56,6 +56,8 @@ export default class ClassicImageResizeCommand extends Command {
                     options['max-width'],
                     imageElement
                 )
+            } else {
+                writer.removeAttribute('max-width', imageElement);
             }
         });
 

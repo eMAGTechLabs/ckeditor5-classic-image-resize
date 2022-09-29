@@ -52,14 +52,19 @@ export default class ClassicImageResizeUi extends Plugin {
             } );
 
             input.on('input', () => {
+                console.log(input);
                 this._validateInput(input);
                 if (input.hasError) {
                     return input;
+                } else if (input.isEmpty) {
+                    editor.execute( 'imageMaxWidth', {
+                        'max-width': null
+                    });
+                } else {
+                    editor.execute('imageMaxWidth', {
+                        'max-width': input.element.value
+                    });
                 }
-
-                editor.execute( 'imageMaxWidth', {
-                    'max-width': input.element.value
-                })
             } );
 
             return input;
@@ -69,6 +74,7 @@ export default class ClassicImageResizeUi extends Plugin {
     _validateInput(view) {
         view.set('errorText', null);
         view.set('hasError', false);
+        view.set('isEmpty', true);
 
         if (isNaN(view.element.value)) {
             view.set('errorText', 'Input must be numeric');
@@ -78,6 +84,14 @@ export default class ClassicImageResizeUi extends Plugin {
         if (view.element.value < 10) {
             view.set('errorText', `Minimum size must be more than 10px`);
             view.set('hasError', true);
+        }
+
+        if (view.element.value.length !== 0) {
+            view.set('isEmpty', false);
+        } else {
+            view.set('errorText', null);
+            view.set('hasError', false);
+            view.set('isEmpty', true);
         }
         return view;
     }
