@@ -1,12 +1,12 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import InputTextView from "@ckeditor/ckeditor5-ui/src/inputtext/inputtextview";
 
-import '../../theme/classic-image-resize.css';
+import '../../theme/image-max-width.css';
 
 /**
  * The image style UI plugin.
  */
-export default class ClassicImageResizeUi extends Plugin {
+export default class ImageMaxWidthUi extends Plugin {
     /**
      * @inheritDoc
      */

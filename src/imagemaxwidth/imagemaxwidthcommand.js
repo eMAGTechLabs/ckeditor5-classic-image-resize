@@ -2,7 +2,7 @@ import Command from '@ckeditor/ckeditor5-core/src/command';
 /**
  * The image resize command. Currently, it supports both the width and the height attributes.
  */
-export default class ClassicImageResizeCommand extends Command {
+export default class ImageMaxWidthCommand extends Command {
 
     constructor( editor ) {
         super( editor );

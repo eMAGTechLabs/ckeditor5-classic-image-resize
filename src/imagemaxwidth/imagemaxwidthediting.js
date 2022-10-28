@@ -1,8 +1,8 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import ClassicImageResizeCommand from "./classicimageresizecommand";
+import ImageMaxWidthCommand from "./imagemaxwidthcommand";
 import ImageUtils from "@ckeditor/ckeditor5-image/src/imageutils";
 
-export default class ClassicImageResizeEditing extends Plugin {
+export default class ImageMaxWidthEditing extends Plugin {
     /**
      * @inheritDoc
      */
@@ -24,7 +24,7 @@ export default class ClassicImageResizeEditing extends Plugin {
         const schema = editor.model.schema;
 
         // Register imageSize command.
-        editor.commands.add( 'imageMaxWidth', new ClassicImageResizeCommand( editor ) );
+        editor.commands.add( 'imageMaxWidth', new ImageMaxWidthCommand( editor ) );
 
         schema.extend( 'imageInline', {
             allowAttributes: [
